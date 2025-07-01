@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Classificador de Acesso</title>
+  </head>
+  <body>
+    <h1>Digitar (F12) para os Resultados!</h1>
+
+    <script>
+        // prompt para idade e status de registro
+        let idade = Number(prompt("Por favor, digite sua idade:"));
+        let statusRegistro = prompt("Seu status de registro (digite 'registrado' ou 'não registrado'):").toLowerCase().trim();
+
+
+        // Usar operador ternário para determinar maioridade
+        let maiorDeIdade = (idade >= 18) ? true : false;
+
+        // Mensagem de maioridade/menoridade
+        if (maiorDeIdade) {
+            console.log("Você é maior de idade.");
+        } else {
+            console.log("Você é menor de idade.");
+        }
+
+        // Estrutura switch para mensagem personalizada com base no status
+        switch (statusRegistro) {
+            case "registrado":
+                console.log("Boas-vindas ao sistema, usuário registrado!");
+                break;
+            case "não registrado":
+                console.log("Por favor, complete seu registro para ter acesso total.");
+                break;
+            default:
+                console.log("Status desconhecido.");
+        }
+
+        // operador lógico if para verificar acesso completo/limitado
+        if (maiorDeIdade && statusRegistro === "registrado") {
+            console.log("Acesso completo concedido! Você tem permissão para todas as funcionalidades.");
+        }
+        else if (!maiorDeIdade || statusRegistro === "não registrado") {
+            console.log("Acesso limitado. Algumas funcionalidades podem estar restritas.");
+        }
+        else {
+            console.log("Não foi possível determinar o nível de acesso com as informações fornecidas.");
+        }
+        console.log(`--- Fim da Classificação ---`);
+    </script>
+  </body>
+</html>

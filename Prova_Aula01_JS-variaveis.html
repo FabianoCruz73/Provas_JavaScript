@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variáveis & Calculadora</title>
+</head>
+<body>
+    
+    <script>
+        // Declaração de variáveis
+        let numero1 = Number(prompt(`Insira o primeiro número da calculadora:`));
+        let numero2 = Number(prompt(`Insira o segundo número da calculadora:`));
+        
+
+        // Processamento de dados
+        // somar dois números
+        let soma = numero1 + numero2;
+        console.log(`Soma = ${soma}`);
+        let resultado = numero1;
+        resultado += numero2;
+        console.log(`Adição (usando +=): ${numero1} += ${numero2} resulta em ${resultado}`);
+
+        // subtrair dois números
+        let subtracao = numero1 - numero2;
+        console.log(`Subtração = ${subtracao}`);
+        resultado = numero1; // Resetando resultado para o valor original de numero1
+        resultado -= numero2;
+        console.log(`Subtração (usando -=): ${numero1} -= ${numero2} resulta em ${resultado}`);
+
+        // multiplicar dois números
+        let multiplicacao = numero1 * numero2;
+        console.log(`Multiplicação = ${multiplicacao}`);
+        resultado = numero1; // Resetando resultado para o valor original de numero1
+        resultado *= numero2;
+        console.log(`Multiplicação (usando *=): ${numero1} *= ${numero2} resulta em ${resultado}`);
+
+        // dividir dois números
+        let divisao = numero1 / numero2;
+        console.log(`Divisão = ${divisao}`);
+        resultado = numero1; // Resetando resultado para o valor original de numero1
+        resultado /= numero2;
+        console.log(`Divisão (usando /=): ${numero1} /= ${numero2} resulta em ${resultado}`);
+
+        // resto do número1 por número2
+        let resto = numero1 % numero2;
+        console.log(`Resto da divisão = ${resto}`);
+        resultado = numero1; // Resetando resultado para o valor original de numero1
+        resultado %= numero2;
+        console.log(`Resto (usando %=): ${numero1} %= ${numero2} resulta em ${resultado}`);
+
+    </script>
+        
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coletor e Processador de Nomes</title>
+</head>
+<body>
+    <h1>Digite (F12) para visualizar o processamento e resultado!</h1>
+
+    <script>
+        const nomesColetados = []; // Array necessário para armazenar os nomes e utilizar o FOR...OF para exibir mensagens de boas-vindas.
+
+        console.log("--- Coleta de Nomes ---");
+        console.log("Digite 'sair' a qualquer momento para encerrar a coleta.");
+
+        // Coleta de Dados com while (true)
+        while (true) {
+            let nome = prompt("Digite um nome (ou 'sair' para finalizar):");
+
+            // Verifica se o usuário quer sair
+            if (nome === null) { // Se clicar em 'Cancelar' no prompt
+                console.log("Coleta de nomes cancelada.");
+                break;
+            }
+            if (nome.toLowerCase().trim() === "sair") {
+                console.log("Coleta de nomes finalizada.");
+                break; // Encerra o loop
+            }
+
+            // Adiciona o nome ao array, se não estiver vazio
+            nome = nome.trim(); // Remove espaços em branco extras
+            if (nome !== "") {
+                nomesColetados.push(nome);
+                console.log(`'${nome}' adicionado.`);
+            } else {
+                console.log("Nome em branco ignorado.");
+            }
+        }
+
+        console.log("\n--- Nomes Coletados (com índices usando for) ---");
+        // Processamento com for
+        if (nomesColetados.length === 0) {
+            console.log("Nenhum nome foi coletado.");
+        } else {
+            for (let i = 0; i < nomesColetados.length; i++) {
+                console.log(`${i + 1}: ${nomesColetados[i]}`);
+            }
+        }
+
+        console.log("\n--- Mensagens de Boas-Vindas (usando for...of) ---");
+        // Exibição com for...of
+        if (nomesColetados.length === 0) {
+             console.log("Não há nomes para exibir mensagens de boas-vindas.");
+        } else {
+            for (const nome of nomesColetados) {
+                console.log(`Bem-vindo(a), ${nome}!`);
+            }
+        }
+
+        console.log("\n--- Programa Finalizado ---");
+    </script>
+</body>
+</html>
