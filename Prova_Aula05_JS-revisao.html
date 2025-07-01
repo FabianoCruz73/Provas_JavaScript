@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Tarefas</title>
+</head>
+<body>
+    <h1>Gerenciador de Tarefas</h1>
+    <h2>Instruções nas janelas de Prompt e Alert!</h2>
+    <p>Os logs das operações também aparecem no Console (F12).</p>
+
+    <script>
+        const listaDeTarefas = []; // Array para armazenar as tarefas
+        let continuarPrograma = true; // Variável de controle do loop principal
+
+        // --- * Interação Contínua:  loop while ---
+        while (continuarPrograma) {
+            // Exibir o menu e coletar a opção
+            let opcao = prompt(
+                "--- Gerenciador de Tarefas ---\n" +
+                "1. Adicionar Tarefa\n" +
+                "2. Listar Tarefas\n" +
+                "3. Remover Tarefa\n" +
+                "4. Concluir Tarefa\n" +
+                "5. Sair\n\n" +
+                "Escolha uma opção (1-5):"
+            );
+
+            // --- * Adicionar Tarefas: (Opção 1) ---
+            if (opcao === '1') {
+                let novaTarefa = prompt("Digite o nome da nova tarefa:");
+                if (novaTarefa !== null) { // Verifica se o usuário não clicou em 'Cancelar'
+                    let tarefaFormatada = novaTarefa.trim();
+                    if (tarefaFormatada !== "") {
+                        listaDeTarefas.push(tarefaFormatada);
+                        console.log(`Tarefa "${tarefaFormatada}" adicionada.`);
+                        alert(`"${tarefaFormatada}" adicionada à lista!`);
+                    } else {
+                        console.log("Nome da tarefa não pode ser vazio.");
+                        alert("Nome da tarefa não pode ser vazio.");
+                    }
+                } else {
+                    console.log("Adição de tarefa cancelada.");
+                }
+            }
+
+            // --- * Listar Tarefas: (Opção 2) ---
+            else if (opcao === '2') {
+                console.log("Listando tarefas...");
+                let mensagemLista = "--- Suas Tarefas ---\n";
+                if (listaDeTarefas.length === 0) {
+                    mensagemLista += "Nenhuma tarefa na lista.";
+                } else {
+                    for (let i = 0; i < listaDeTarefas.length; i++) { // loop for
+                        mensagemLista += `${i + 1}: ${listaDeTarefas[i]}\n`;
+                    }
+                }
+                mensagemLista += "--------------------";
+                console.log(mensagemLista); // Exibe a lista no console
+                console.log("Lista exibida no alert.");
+                alert(mensagemLista);
+            }
+
+            // --- * Remover Tarefas: (Opção 3) ---
+            else if (opcao === '3') {
+                if (listaDeTarefas.length === 0) {
+                    console.log("A lista de tarefas está vazia. Nada para remover.");
+                    alert("A lista de tarefas está vazia. Nada para remover.");
+                } else {
+                    // Mensagem no prompt para mostrar os itens com índices que podem ser removidos
+                    let mensagemParaRemover = "Sua lista atual:\n";
+                    for (let i = 0; i < listaDeTarefas.length; i++) {
+                        mensagemParaRemover += `${i + 1}: ${listaDeTarefas[i]}\n`;
+                    }
+                    mensagemParaRemover += "\nDigite o NÚMERO da tarefa que deseja remover:";
+
+                    let indiceRemoverStr = prompt(mensagemParaRemover);
+                    let indiceRemover = parseInt(indiceRemoverStr);
+                    let indiceRealRemover = indiceRemover - 1; // Ajusta para base 0
+
+                    // Validação do índice
+                    if (isNaN(indiceRemover) || indiceRemover < 1 || indiceRemover > listaDeTarefas.length) {
+                        console.log(`Erro: Número inválido. Digite um número entre 1 e ${listaDeTarefas.length}.`);
+                        alert(`Número inválido! Digite um número entre 1 e ${listaDeTarefas.length}.`);
+                    } else {
+                        const tarefaRemovida = listaDeTarefas.splice(indiceRealRemover, 1);
+                        console.log(`Tarefa "${tarefaRemovida[0]}" removida.`);
+                        alert(`Tarefa "${tarefaRemovida[0]}" removida!`);
+                    }
+                }
+            }
+            
+            // --- * Concluir Tarefas: (Opção 4) ---
+            else if (opcao === '4') {
+                if (listaDeTarefas.length === 0) {
+                    console.log("A lista de tarefas está vazia. Nada para concluir.");
+                    alert("A lista de tarefas está vazia. Nada para concluir.");
+                } else {
+                    // Prepara a mensagem para mostrar os itens com índices no prompt de conclusão
+                    let mensagemParaConcluir = "Sua lista atual:\n";
+                    for (let i = 0; i < listaDeTarefas.length; i++) {
+                        mensagemParaConcluir += `${i + 1}: ${listaDeTarefas[i]}\n`;
+                    }
+                    mensagemParaConcluir += "\nDigite o NÚMERO da tarefa que deseja marcar como concluída:";
+
+                    let indiceConcluirStr = prompt(mensagemParaConcluir);
+                    let indiceConcluir = parseInt(indiceConcluirStr);
+                    let indiceRealConcluir = indiceConcluir - 1; // Ajusta para base 0
+
+                    // Validação do índice
+                    if (isNaN(indiceConcluir) || indiceConcluir < 1 || indiceConcluir > listaDeTarefas.length) {
+                        console.log(`Erro: Índice inválido. Digite um número entre 1 e ${listaDeTarefas.length}.`);
+                        alert(`Índice inválido! Digite um número entre 1 e ${listaDeTarefas.length}.`);
+                    } else {
+                        let tarefaSendoConcluida = listaDeTarefas[indiceRealConcluir];
+                        if (!tarefaSendoConcluida.startsWith("✅ ")) { // Evita adicionar o emoji múltiplas vezes
+                            listaDeTarefas[indiceRealConcluir] = `✅ ${tarefaSendoConcluida}`;
+                            console.log(`Tarefa "${tarefaSendoConcluida}" marcada como concluída.`);
+                            alert(`Tarefa "${tarefaSendoConcluida}" marcada como concluída!`);
+                        } else {
+                            console.log(`Tarefa "${tarefaSendoConcluida}" já está marcada como concluída.`);
+                            alert(`Tarefa "${tarefaSendoConcluida}" já está marcada como concluída.`);
+                        }
+                    }
+                }
+            } 
+            // --- Opção de Sair do loop (Opção 5) ---
+            else if (opcao === '5') {
+                console.log("Saindo do gerenciador de tarefas.");
+                alert("Saindo do gerenciador de tarefas. Até mais!");
+                continuarPrograma = false; // Define a condição de saída do loop while
+            } 
+            // --- Lógica para Opção Inválida ---
+            else {
+                console.log("Opção inválida. Por favor, escolha um número de 1 a 5.");
+                alert("Opção inválida. Por favor, escolha um número de 1 a 5.");
+            }
+            console.log("\n--- Fim do Programa ---\n"); // Separador no console para cada ação
+        }
+    </script>
+</body>
+</html>
