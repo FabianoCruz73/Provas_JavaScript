@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Lista de Compras (Interativo)</title>
+</head>
+<body>
+    <h1>Instruções nas janelas de Prompt e Alert!</h1>
+    <p>As operações também serão exibidos no Console (F12).</p>
+
+    <script>
+        const listaDeCompras = []; // array para armazenar os itens da lista
+
+        // --- * Adicionar Itens: Inclusão de Itens (Loop com prompt) ---
+        console.log("--- Início da Inclusão de Itens ---");
+        while (true) {
+            let item = prompt("Digite um item para adicionar à lista de compras (ou 'parar' para finalizar):");
+
+            if (item === null) { // Usuário clicou em 'Cancelar'
+                console.log("Inclusão de itens cancelada.");
+                break;
+            }
+
+            item = item.trim(); // Remove espaços extras
+
+            if (item.toLowerCase() === "parar") {
+                console.log("Inclusão de itens finalizada.");
+                break;
+            }
+
+            if (item !== "") {
+                listaDeCompras.push(item); // inserindo o item no array
+                console.log(`"${item}" adicionado.`);
+            } else {
+                console.log("Item em branco ignorado.");
+            }
+        }
+        console.log("-----------------------------------\n");
+
+        // --- * Remover Itens: utilizando o método splice() / (prompt) ---
+        console.log("--- Início da Remoção de Item ---");
+        if (listaDeCompras.length === 0) {
+            console.log("A lista está vazia. Não é possível remover itens.");
+        } else {
+            // Prepara a mensagem para mostrar os itens com índices no prompt de remoção
+            let mensagemRemocao = "Sua lista atual:\n";
+            let tempIndexRemocao = 0;
+            for (const item of listaDeCompras) {
+                mensagemRemocao += `${tempIndexRemocao + 1}: ${item}\n`;
+                tempIndexRemocao++;
+            }
+            mensagemRemocao += "\nDigite o NÚMERO do item que deseja remover:";
+            console.log(mensagemRemocao); // Exibe a mensagem de remoção no console
+
+            let indiceParaRemoverStr = prompt(mensagemRemocao);
+            let indiceParaRemover = parseInt(indiceParaRemoverStr);
+            let indiceRealParaRemover = indiceParaRemover - 1; // Ajusta para base 0
+
+            if (isNaN(indiceParaRemover) || indiceParaRemover < 1 || indiceParaRemover > listaDeCompras.length) {
+                console.log("Erro: Índice inválido para remoção.");
+                alert("Índice inválido para remoção. Nenhuma alteração feita.");
+            } else {
+                const itemRemovido = listaDeCompras.splice(indiceRealParaRemover, 1); // Remove o item do array
+                console.log(`"${itemRemovido[0]}" removido da lista.`);
+                alert(`"${itemRemovido[0]}" foi removido da lista.`);
+            }
+        }
+        console.log("---------------------------------\n");
+
+        // --- * Exibir Lista: loop for...of para percorrer e exibir os itens. Cada item x respectivo índice. ---
+        console.log("--- Exibindo Lista Atual ---");
+        let mensagemExibicao = "Sua Lista de Compras Atual:\n";
+        if (listaDeCompras.length === 0) {
+            mensagemExibicao += "A lista está vazia.";
+        } else {
+            let alertIndex = 0;
+            for (const item of listaDeCompras) {
+                mensagemExibicao += `${alertIndex + 1}: ${item}\n`;
+                alertIndex++;
+            }
+        }
+        alert(mensagemExibicao);
+        console.log("Lista atual exibida no alert.");
+        console.log(mensagemExibicao); // Exibe a lista atual no console
+        console.log("----------------------------\n");
+
+        // --- * Atualizar Itens: atualize um item da lista ao fornecer o índice e o novo valor (prompt) ---
+        console.log("--- Início da Atualização de Item ---");
+        if (listaDeCompras.length === 0) {
+            console.log("A lista está vazia. Não é possível atualizar itens.");
+        } else {
+            // mensagem para mostrar os itens com índices no prompt de atualização
+            let mensagemAtualizacao = "Sua lista atual para atualização:\n";
+            let tempIndexAtualizacao = 0;
+            for (const item of listaDeCompras) {
+                mensagemAtualizacao += `${tempIndexAtualizacao + 1}: ${item}\n`;
+                tempIndexAtualizacao++;
+            }
+            mensagemAtualizacao += "\nDigite o NÚMERO do item que deseja atualizar:";
+
+            let indiceParaAtualizarStr = prompt(mensagemAtualizacao);
+            let indiceParaAtualizar = parseInt(indiceParaAtualizarStr);
+            let indiceRealParaAtualizar = indiceParaAtualizar - 1; // Ajusta para o indice real do array
+
+            if (isNaN(indiceParaAtualizar) || indiceParaAtualizar < 1 || indiceParaAtualizar > listaDeCompras.length) {
+                console.log("Erro: Índice inválido para atualização.");
+                alert("Índice inválido para atualização. Nenhuma alteração feita.");
+            } else {
+                let novoValor = prompt(`Digite o novo nome para "${listaDeCompras[indiceRealParaAtualizar]}" (item número ${indiceParaAtualizar}):`);
+                if (novoValor === null) {
+                    console.log("Atualização cancelada.");
+                    alert("Atualização cancelada.");
+                } else {
+                    novoValor = novoValor.trim();
+                    if (novoValor !== "") {
+                        const valorAntigo = listaDeCompras[indiceRealParaAtualizar];
+                        listaDeCompras[indiceRealParaAtualizar] = novoValor;
+                        console.log(`"${valorAntigo}" atualizado para "${novoValor}".`);
+                        alert(`Item "${valorAntigo}" atualizado para "${novoValor}".`);
+                    } else {
+                        console.log("Novo nome do item não pode ser vazio.");
+                        alert("Novo nome do item não pode ser vazio.");
+                    }
+                }
+            }
+        }
+        console.log("-----------------------------------\n");
+
+        // --- Exibir Lista Final (alert) ---
+        console.log("--- Exibindo Lista Final ---");
+        let mensagemFinal = "Sua Lista de Compras Final:\n";
+        if (listaDeCompras.length === 0) {
+            mensagemFinal += "A lista está vazia.";
+        } else {
+            let finalAlertIndex = 0;
+            for (const item of listaDeCompras) {
+                mensagemFinal += `${finalAlertIndex + 1}: ${item}\n`;
+                finalAlertIndex++;
+            }
+        }
+        alert(mensagemFinal);
+        console.log(mensagemFinal); // Exibe a lista final no console
+        console.log("Lista final exibida no alert.");
+        console.log("----------------------------\n");
+
+        console.log("--- Programa Finalizado ---");
+    </script>
+</body>
+</html>
