@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Tarefas (Prompt Personalizado)</title>
+</head>
+<body>
+    <h1>Siga as instruções dos pop-ups de diálogo do navegador</h1>
+    <h2>Digite F12 para acompanhar os comandos no console</h2>
+    
+
+    <script>
+        const listaDeTarefas = []; // Array para armazenar as tarefas
+
+        // --- Função Anônima para Adicionar Tarefas ---
+        const adicionarTarefa = function(tarefa) {
+            console.log("➡️ Iniciando adição de tarefa...");
+            if (tarefa && tarefa.trim() !== "") {
+                listaDeTarefas.push(tarefa.trim());
+                console.log(`✅ Tarefa "${tarefa.trim()}" adicionada com sucesso.`);
+                alert(`✅ Tarefa "${tarefa.trim()}" adicionada à lista!`);
+                return true;
+            }
+            console.log("❌ Tarefa inválida. Nada adicionado.");
+            alert("❌ Tarefa inválida. Nada adicionado.");
+            return false;
+        };
+
+        // --- Arrow Function para Listar Tarefas ---
+        const listarTarefas = () => {
+            console.log("➡️ Iniciando listagem de tarefas...");
+            let mensagemAlerta = "--- Suas Tarefas ---\n";
+            if (listaDeTarefas.length === 0) {
+                mensagemAlerta += "Nenhuma tarefa na lista.";
+                console.log("INFO: Lista de tarefas vazia.");
+            } else {
+                console.log("INFO: Percorrendo e exibindo cada tarefa no console e preparando para o alert.");
+                listaDeTarefas.forEach((tarefa, index) => {
+                    mensagemAlerta += `${index + 1}: ${tarefa}\n`;
+                    console.log(`  - Item ${index + 1}: "${tarefa}"`);
+                });
+            }
+            mensagemAlerta += "--------------------";
+            console.log("SUCESSO: Lista exibida no alert.");
+            alert(mensagemAlerta);
+        };
+
+        // Função auxiliar para obter a lista formatada para os prompts
+        const getListaFormatadaParaPrompt = () => {
+            let mensagem = "Sua lista atual:\n";
+            if (listaDeTarefas.length === 0) {
+                mensagem += "Nenhuma tarefa.";
+            } else {
+                listaDeTarefas.forEach((tarefa, index) => {
+                    mensagem += `${index + 1}: ${tarefa}\n`;
+                });
+            }
+            return mensagem;
+        };
+
+        // Função auxiliar para validar índice
+        const validarIndice = (indiceStr) => {
+            const indice = parseInt(indiceStr);
+            if (isNaN(indice) || indice < 1 || indice > listaDeTarefas.length) {
+                const erroMsg = `❌ ERRO: Índice inválido "${indiceStr}". Por favor, digite um número entre 1 e ${listaDeTarefas.length}.`;
+                console.log(erroMsg);
+                alert(erroMsg);
+                return null;
+            }
+            return indice - 1; // Retorna o índice real (base 0)
+        };
+
+        // --- Funções de Callback para Manipular Tarefas ---
+        const executarOperacaoNaTarefa = (operacaoCallback, promptMessage) => {
+            if (listaDeTarefas.length === 0) {
+                const alertaMsg = "⚠️ ALERTA: A lista de tarefas está vazia. Nenhuma operação pode ser realizada.";
+                console.log(alertaMsg);
+                alert(alertaMsg);
+                return;
+            }
+
+            // Usa a 'promptMessage' personalizada
+            const indiceStr = prompt(`${getListaFormatadaParaPrompt()}\n${promptMessage}`);
+            const indiceReal = validarIndice(indiceStr);
+
+            if (indiceReal !== null) {
+                operacaoCallback(indiceReal); // Chama o callback com o índice validado
+            }
+        };
+
+        // --- Callbacks Específicos para as Operações ---
+        const removerTarefaCallback = (indice) => {
+            console.log("➡️ Executando remoção...");
+            const tarefaRemovida = listaDeTarefas.splice(indice, 1);
+            console.log(`🗑️ Tarefa "${tarefaRemovida[0]}" removida com sucesso.`);
+            alert(`🗑️ Tarefa "${tarefaRemovida[0]}" removida!`);
+        };
+
+        const atualizarTarefaCallback = (indice) => {
+            console.log("➡️ Executando atualização...");
+            const novoNome = prompt(`Atualizar "${listaDeTarefas[indice]}". Digite o novo nome:`);
+            if (novoNome && novoNome.trim() !== "") {
+                const nomeAntigo = listaDeTarefas[indice];
+                listaDeTarefas[indice] = novoNome.trim();
+                console.log(`🔄 Tarefa "${nomeAntigo}" atualizada para "${novoNome.trim()}" com sucesso.`);
+                alert(`🔄 Tarefa "${nomeAntigo}" atualizada para "${novoNome.trim()}".`);
+            } else {
+                console.log("❌ Nome de tarefa inválido. Atualização cancelada.");
+                alert("❌ Nome de tarefa inválido. Atualização cancelada.");
+            }
+        };
+
+        const concluirTarefaCallback = (indice) => {
+            console.log("➡️ Executando conclusão...");
+            let tarefaAtual = listaDeTarefas[indice];
+            if (!tarefaAtual.startsWith("✅ ")) {
+                listaDeTarefas[indice] = `✅ ${tarefaAtual}`;
+                console.log(`✅ Tarefa "${tarefaAtual}" marcada como concluída com sucesso.`);
+                alert(`✅ Tarefa "${tarefaAtual}" marcada como concluída!`);
+            } else {
+                console.log(`⚠️ Tarefa "${tarefaAtual}" já estava concluída.`);
+                alert(`⚠️ Tarefa "${tarefaAtual}" já está marcada como concluída.`);
+            }
+        };
+
+        // --- Interação com o Usuário (Loop Principal) ---
+        let continuar = true;
+        console.log("--- Gerenciador de Tarefas Iniciado ---");
+
+        const tituloAppTexto = "--- Gerenciador de Tarefas ---";
+        const descricaoAppTexto = "Siga as instruções dos pop-ups e tecle F12 para acompanhar os comandos no console";
+        alert(`${tituloAppTexto}\n${descricaoAppTexto}\n\nClique OK para começar!`);
+
+        while (continuar) {
+            const opcao = prompt(
+                "--- Menu Principal ---\n" +
+                "1. Adicionar Tarefa\n" +
+                "2. Listar Tarefas\n" +
+                "3. Remover Tarefa\n" +
+                "4. Atualizar Tarefa\n" +
+                "5. Concluir Tarefa\n" +
+                "6. Sair\n\n" +
+                "Escolha uma opção (1-6):"
+            );
+
+            console.log(`\nOpção escolhida pelo usuário: ${opcao}`);
+            
+            if (opcao === '1') {
+                const novaTarefa = prompt("Digite o nome da tarefa a ser adicionada:");
+                adicionarTarefa(novaTarefa);
+            } else if (opcao === '2') {
+                listarTarefas();
+            } else if (opcao === '3') {
+                console.log("Chamando operação de remoção.");
+                // Passando a mensagem personalizada para o prompt
+                executarOperacaoNaTarefa(removerTarefaCallback, "Digite o NÚMERO para REMOVER a tarefa:");
+            } else if (opcao === '4') {
+                console.log("Chamando operação de atualização.");
+                // Passando a mensagem personalizada para o prompt
+                executarOperacaoNaTarefa(atualizarTarefaCallback, "Digite o NÚMERO para ATUALIZAR a tarefa:");
+            } else if (opcao === '5') {
+                console.log("Chamando operação de conclusão.");
+                // Passando a mensagem personalizada para o prompt
+                executarOperacaoNaTarefa(concluirTarefaCallback, "Digite o NÚMERO para CONCLUIR a tarefa:");
+            } else if (opcao === '6') {
+                console.log("Saindo do gerenciador de tarefas.");
+                alert("👋 Saindo do gerenciador de tarefas. Até mais!");
+                continuar = false;
+            } else {
+                console.log("❌ Opção inválida. Por favor, escolha um número de 1 a 6.");
+                alert("❌ Opção inválida. Por favor, escolha um número de 1 a 6.");
+            }
+            console.log("\n--- Fim da Interação Atual ---\n");
+        }
+        console.log("--- Gerenciador de Tarefas Finalizado ---");
+    </script>
+</body>
+</html>
